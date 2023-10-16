@@ -5,7 +5,7 @@
 hex_length=25;
 
 // t paramter
-t=5;
+t=3;
 
 // Theta
 theta=15;
@@ -14,7 +14,7 @@ theta=15;
 thickness=2;
 
 // Sinew holding pieces together
-sinew_length=0;
+sinew_length=.5;
 
 // Gap sizes
 gap=.5;
@@ -35,8 +35,9 @@ function proj (coord, alpha, k) = (
 
 // Define intersection between two vectors defined by angle & distance.
 function inters (p1, p2, angle1, angle2) = (
-[(p1[0] - p2[0])/ (cos(angle1)-cos(angle2)), 
- (p1[1] - p2[1])/ (sin(angle1)-sin(angle2))] 
+let (x=-(p1[1] - p2[1]- p1[0]*tan(angle1) + p2[0]*tan(angle2))/ (tan(angle1)-tan(angle2)))
+[x,
+ p1[1]+(x - p1[0])*tan(angle1)]
 );
 
 //Distance between two points.
@@ -48,8 +49,9 @@ module triangle(hex_length, t, theta){
     anchor = [-hex_length, 0];
     anchor2 = [0, 0];
     anchor3 = proj(anchor, 60, hex_length);
-    plength = distance(proj(anchor, 60, t), 
-                       inters(proj(anchor, 60, t), [-t-gap, 0], theta, theta+90)) - sinew_length;
+    plength = distance(proj(anchor, 60, t+gap), 
+                       inters(proj(anchor, 60, t+gap), [-t-gap, 0], theta, theta+120)) - sinew_length;
+    //echo(inters(proj(anchor, 60, t), [-t-gap, 0], theta, theta+120));
     polygon(points=[
         anchor,
         anchor2,
@@ -62,13 +64,13 @@ module triangle(hex_length, t, theta){
         
         [-t, 0],
         [-t-gap, 0],
-        proj([-t-gap, 0], theta+90, plength),
-        proj([-t, 0], theta+90, plength),
+        proj([-t-gap, 0], theta+120, plength),
+        proj([-t, 0], theta+120, plength),
     
         proj(anchor3, 300, t),
         proj(anchor3, 300, t+gap),
-        proj(proj(anchor3, 300, t+gap), 210+theta, plength),
-        proj(proj(anchor3, 300, t), 210+theta, plength),
+        proj(proj(anchor3, 300, t+gap), 240+theta, plength),
+        proj(proj(anchor3, 300, t), 240+theta, plength),
         
     ],
     paths=[
