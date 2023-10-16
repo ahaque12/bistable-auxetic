@@ -50,7 +50,6 @@ module triangle(hex_length, t, theta){
     anchor3 = proj(anchor, 60, hex_length);
     plength = distance(proj(anchor, 60, t), 
                        inters(proj(anchor, 60, t), [-t-gap, 0], theta, theta+90)) - sinew_length;
-    echo(plength);
     polygon(points=[
         anchor,
         anchor2,
@@ -94,7 +93,7 @@ module bistable_auxetic(hex_length, t, theta) {
     vertical_dist = hex_length*sin(60)*2;
     for (i=[0:rows-1])
         for (j=[0:columns-1])
-            translate([hex_length*j, vertical_dist*(i+(j%2)*.5), 0]) hexagon(hex_length, t, theta);
+            translate([hex_length*j*1.5, vertical_dist*(i+(j%2)*.5), 0]) hexagon(hex_length, t, theta);
 }
 
 linear_extrude(thickness) bistable_auxetic(hex_length, t, theta);
